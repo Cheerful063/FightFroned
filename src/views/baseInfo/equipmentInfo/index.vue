@@ -74,11 +74,11 @@
 			<el-table-column label="生产批号" align="center" prop="batchNo" />
 			<el-table-column label="制造商" align="center" prop="manufacturer" />
 			<el-table-column label="设备状态" align="center" prop="status" :formatter="statusFormat" />
-			<el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+			<el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
 				<template #default="scope">
-					<el-button size="min" type="text" icon="Edit" @click="handleUpdate(scope.row)"
+					<el-button size="small" type="text" icon="Edit" @click="handleUpdate(scope.row)"
 						v-hasPermi="['baseInfo:equipmentInfo:edit']">修改</el-button>
-					<el-button size="min" type="text" icon="Delete" @click="handleDelete(scope.row)"
+					<el-button size="small" type="text" icon="Delete" @click="handleDelete(scope.row)"
 						v-hasPermi="['baseInfo:equipmentInfo:remove']">删除</el-button>
 				</template>
 			</el-table-column>
