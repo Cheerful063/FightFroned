@@ -89,6 +89,8 @@
 				this.resetForm("queryForm");
 				this.handleQuery();
 			},
-		}
+		},
+		
+		
 	};
 </script>
