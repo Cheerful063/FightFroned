@@ -34,7 +34,6 @@
 		<!-- 分页 -->
 		<pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
 			@pagination="getList" />
-
 	</div>
 </template>
 <script>
@@ -90,7 +89,5 @@
 				this.handleQuery();
 			},
 		},
-		
-		
 	};
 </script>

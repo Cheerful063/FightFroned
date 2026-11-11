@@ -419,6 +419,7 @@ export default {
           this.download(response.msg);
         })
     }
+	
   }
 };
 </script>
