@@ -24,7 +24,7 @@
           icon="Plus"
           @click="handleAdd"
           v-hasPermi="['mesModel:factoryModel:add']"
-        >新增</el-button>
+        >新建</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -62,7 +62,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="产品" align="center" prop="productName" />
-      <el-table-column label="物料档案编号" align="center" prop="materialId" />
+      <!-- <el-table-column label="物料档案编号" align="center" prop="materialId" /> -->
       <el-table-column label="生产线名称" align="center" prop="productLineName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
@@ -322,7 +322,7 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
+    /** 新建按钮操作 */
     handleAdd() {
       this.reset();
       this.open = true;
@@ -352,7 +352,7 @@ export default {
             });
           } else {
             addFactoryModel(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.msgSuccess("新建成功");
               this.open = false;
               this.getList();
             });
