@@ -13,7 +13,7 @@
 		<el-row :gutter="10" class="mb8">
 			<el-col :span="1.5">
 				<el-button type="primary" plain icon="Plus" @click="handleAdd"
-					v-hasPermi="['mesModel:productModel:add']">新增
+					v-hasPermi="['mesModel:productModel:add']">新建
 				</el-button>
 			</el-col>
 			<el-col :span="1.5">
@@ -58,13 +58,11 @@
 			v-model:limit="queryParams.pageSize" @pagination="getList" />
 
 		<!-- 添加或修改产品建模对话框 -->
-		<el-dialog :title="title" v-model="open" width="1000px" append-to-body>
+		<el-dialog :title="title" v-model="open" width="1000px" append-to-body >
 			<el-form ref="productModelRef" :model="form" :rules="rules" label-width="80px">
 				<el-form-item label="产品" prop="materialId">
-					<el-input v-model="form.productName" readonly />
-
-					<el-button @click="handleSelectMaterial">选择</el-button>
-
+					<el-input v-model="form.productName" readonly style="flex: 1;" />
+					<el-button @click="openPick('product')">选择</el-button>
 				</el-form-item>
 				<el-form-item label="产品型号" prop="productType">
 					<el-input v-model="form.productType" disabled />
@@ -91,9 +89,14 @@
 					@selection-change="handleMesProductModelDetailSelectionChange" ref="mesProductModelDetail">
 					<el-table-column type="selection" width="50" align="center" />
 					<el-table-column label="序号" align="center" prop="index" width=auto />
-					<el-table-column label="物料" align="center" prop="index" width=auto>
+
+					<el-table-column label="物料" align="center" prop="materialId" width="220">
 						<template #default="scope">
-							<el-input v-model="scope.row.materialName" />
+							<el-input v-model="scope.row.materialName" readonly>
+								<template #append>
+									<el-button @click="openPick(scope.row)">选择</el-button>
+								</template>
+							</el-input>
 						</template>
 					</el-table-column>
 
@@ -104,17 +107,17 @@
 					</el-table-column>
 					<el-table-column label="规格" align="center" prop="index" width=auto>
 						<template #default="scope">
-							<el-input v-model="scope.row.productSpec" />
+							<el-input v-model="scope.row.materialSpec" />
 						</template>
 					</el-table-column>
 					<el-table-column label="单位" align="center" prop="index" width=auto>
 						<template #default="scope">
-							<el-input v-model="scope.row.productUnit" />
+							<el-input v-model="scope.row.materialUnit" />
 						</template>
 					</el-table-column>
 					<el-table-column label="备注" align="center" prop="index" width=auto>
 						<template #default="scope">
-							<el-input v-model="scope.row.remark" />
+							<el-input v-model="scope.row.detailRemark" />
 						</template>
 					</el-table-column>
 				</el-table>
@@ -249,11 +252,11 @@
 		multiple.value = !selection.length;
 	}
 
-	/** 新增按钮操作 */
+	/** 新建按钮操作 */
 	function handleAdd() {
 		reset();
 		open.value = true;
-		title.value = "添加产品建模";
+		title.value = "新建产品建模";
 	}
 
 	/** 修改按钮操作 */
@@ -351,13 +354,25 @@
 
 	function handleMaterialSelected(list) {
 		if (list && list.length > 0) {
-			material.value = list[0];
-			form.value.materialId = material.value.id;
-			form.value.productName = material.value.name;
-			form.value.productModel = material.value.model;
-			form.value.productSpecification = material.value.specification;
+			const m = list[0];
+			// 填上半部分
+			if (pickTarget.value === 'product') {
+				form.value.materialId = m.id;
+				form.value.productName = m.name;
+				form.value.productType = m.model;
+				form.value.productSpec = m.specification;
+				form.value.productUnit = m.unit;
+			} else {
+				// 填下半部分
+				const row = pickTarget.value;
+				row.materialId = m.id;
+				row.materialName = m.name;
+				row.materialType = m.model;
+				row.materialSpec = m.specification;
+				row.materialUnit = m.unit;
+			}
+			materialSelectOpen.value = false;
 		}
-		materialSelectOpen.value = false;
 	}
 
 	function handleMaterialCancel() {

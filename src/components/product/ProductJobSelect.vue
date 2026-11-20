@@ -32,11 +32,11 @@
       <el-table-column label="作业名称" align="center" prop="name"  width="200" />
       <el-table-column label="生产计划" align="center" prop="planNo"  width="200" />
       <el-table-column label="产品" align="center" prop="productName"  width="200" />
-      <el-table-column label="型号" prop="materialModel" width="200" >
+      <el-table-column label="型号" prop="productUnit" width="200" >
       </el-table-column>
-      <el-table-column label="规格" prop="materialSpecification" width="200" >
+      <el-table-column label="规格" prop="productSpec" width="200" >
       </el-table-column>
-      <el-table-column label="单位" prop="materialUnit" width="200" >
+      <el-table-column label="单位" prop="productUnit" width="200" >
       </el-table-column>
       <el-table-column label="开始时间" align="center" prop="startTime"  width="200" >
         <template #default="scope">

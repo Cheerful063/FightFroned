@@ -72,7 +72,7 @@
 				<el-form-item label="工艺描述" prop="description">
 					<el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
 				</el-form-item>
-				<el-form-item label="单位耗电量" prop="powerConsume" >
+				<el-form-item label="单位耗电量" prop="powerConsume">
 					<el-input v-model="form.powerConsume" placeholder="请输入单位耗电量" />
 				</el-form-item>
 				<el-form-item label="备注" prop="remark">

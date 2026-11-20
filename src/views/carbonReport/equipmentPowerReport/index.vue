@@ -32,8 +32,10 @@
 			<el-table-column label="总碳排放" align="center" prop="totalCarbonEmission" />
 		</el-table>
 		<!-- 分页 -->
-		<pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-			@pagination="getList" />
+		<!-- 		<pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+			@pagination="getList" /> -->
+		<pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum"
+			v-model:limit="queryParams.pageSize" @pagination="getList" />
 	</div>
 </template>
 <script>
@@ -62,10 +64,10 @@
 					startDate: null,
 					endDate: null
 				},
-				
+
 			};
 		},
-		created(){
+		created() {
 			this.getList();
 		},
 		methods: {

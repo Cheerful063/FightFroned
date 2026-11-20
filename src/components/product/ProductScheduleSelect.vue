@@ -57,7 +57,8 @@
       <el-table-column label="物料" align="center" prop="materialName"  width="200" />
       <el-table-column label="型号" prop="materialModel" width="200" >
       </el-table-column>
-      <el-table-column label="规格" prop="materialSpecification" width="200" >
+      <el-table-column label="规格" prop="materialSpec" width="200" >
+      <!-- <el-table-column label="规格" prop="materialSpecification" width="200" > -->
       </el-table-column>
       <el-table-column label="单位" prop="materialUnit" width="200" >
       </el-table-column>

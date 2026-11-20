@@ -24,12 +24,12 @@
       <el-table-column label="编号" align="center" prop="id"  />
       <el-table-column label="领料单号" align="center" prop="serialNo"  width="200" />
       <el-table-column label="生产计划" align="center" prop="planNo"  width="200" />
-      <el-table-column label="产品" align="center" prop="materialName"  width="200" />
-      <el-table-column label="型号" prop="materialModel" width="200" >
+      <el-table-column label="产品" align="center" prop="productName"  width="200" />
+      <el-table-column label="型号" prop="productModel" width="200" >
       </el-table-column>
-      <el-table-column label="规格" prop="materialSpecification" width="200" >
+      <el-table-column label="规格" prop="productSpec" width="200" >
       </el-table-column>
-      <el-table-column label="单位" prop="materialUnit" width="200" >
+      <el-table-column label="单位" prop="productUnit" width="200" >
       </el-table-column>
       <el-table-column label="领取日期" align="center" prop="requisitionDate"  width="200" >
         <template #default="scope">

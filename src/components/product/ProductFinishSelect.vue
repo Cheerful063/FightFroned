@@ -7,8 +7,8 @@
       <el-form-item label="生产作业" prop="jobName">
         <el-input v-model="queryParams.jobName" placeholder="请输入生产作业" clearable  @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="产品" prop="materialName">
-        <el-input v-model="queryParams.materialName" placeholder="请输入产品" clearable  @keyup.enter.native="handleQuery" />
+      <el-form-item label="产品" prop="productName">
+        <el-input v-model="queryParams.productName" placeholder="请输入产品" clearable  @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="完工日期">
         <el-date-picker v-model="daterangeFinishDate"  style="width: 240px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
@@ -30,12 +30,12 @@
       <el-table-column label="编号" align="center" prop="id"  />
       <el-table-column label="生产计划" align="center" prop="planNo"  width="200" />
       <el-table-column label="生产作业" align="center" prop="jobName"  width="200" />
-      <el-table-column label="产品" align="center" prop="materialName"  width="200" />
-      <el-table-column label="型号" prop="materialModel" width="200" >
+      <el-table-column label="产品" align="center" prop="productName"  width="200" />
+      <el-table-column label="型号" prop="productModel" width="200" >
       </el-table-column>
-      <el-table-column label="规格" prop="materialSpecification" width="200" >
+      <el-table-column label="规格" prop="productSpec" width="200" >
       </el-table-column>
-      <el-table-column label="单位" prop="materialUnit"  width="200" />
+      <el-table-column label="单位" prop="productUnit"  width="200" />
       <el-table-column label="完工日期" align="center" prop="finishDate"  width="200" >
         <template #default="scope">
           <span>{{ parseTime(scope.row.finishDate, '{y}-{m}-{d}') }}</span>
