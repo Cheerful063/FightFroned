@@ -8,5 +8,3 @@ export function listMaterialCategory(query) {
     params: query
   })
 }
-
-

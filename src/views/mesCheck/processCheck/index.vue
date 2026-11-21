@@ -466,7 +466,7 @@
 	function handleStandardSelect(rows){
 		const row = rows && rows[0];
 		// console.log(row)
-		form.value.checkDate = row.checkItemName;
+		form.value.checkItemName = row.checkItemName;
 		form.value.maxValue = row.maxValue;
 		form.value.minValue = row.minValue;
 		

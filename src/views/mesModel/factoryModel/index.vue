@@ -1,6 +1,6 @@
 <template>
 	<div class="app-container">
-		<el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="90px">
+		<el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
 			<el-form-item label="生产线名称" prop="productLineName">
 				<el-input v-model="queryParams.productLineName" placeholder="请输入生产线名称" clearable
 					@keyup.enter="handleQuery" />
@@ -39,7 +39,6 @@
 			<el-table-column type="selection" width="55" align="center" />
 			<el-table-column label="编号" align="center" prop="id" />
 			<el-table-column label="产品" align="center" prop="materialName" />
-			<!-- <el-table-column label="物料档案编号" align="center" prop="materialId" /> -->
 			<el-table-column label="生产线名称" align="center" prop="productLineName" />
 			<el-table-column label="操作" align="center" class-name="small-padding fixed-width">
 				<template #default="scope">
@@ -59,29 +58,22 @@
 		<!-- 添加或修改工厂建模对话框 -->
 		<el-dialog :title="title" v-model="open" width="1000px" append-to-body>
 			<el-form ref="factoryModelRef" :model="form" :rules="rules" label-width="100px">
-				<!-- <el-form-item label="物料档案编号" prop="materialId">
-					<el-input v-model="form.materialId" placeholder="请输入物料档案编号" />
-				</el-form-item> -->
 				<el-form-item label="生产线名称" prop="productLineName">
 					<el-input v-model="form.productLineName" placeholder="请输入生产线名称" />
 				</el-form-item>
-				
 				<el-form-item label="产品" prop="materialName">
-					<!-- <el-input v-model="form.materialName" placeholder="请输入生产线名称" /> -->
-					<el-input v-model="form.materialName" placeholder="请输入生产线名称" readonly >
+					<el-input v-model="form.materialName" placeholder="" readonly="">
 						<template #append>
 							<el-button @click="openMaterialSelect">选择</el-button>
 						</template>
 					</el-input>
-					
 				</el-form-item>
 				<el-form-item label="产品型号" prop="materialModel">
-					<el-input v-model="form.materialModel" placeholder="请输入生产线名称" disabled/>
+					<el-input v-model="form.materialModel" placeholder="" disabled="" />
 				</el-form-item>
 				<el-form-item label="产品规格" prop="materialSpec">
-				    <el-input v-model="form.materialSpec" placeholder="选择产品后自动带出" disabled />
+					<el-input v-model="form.materialSpec" placeholder="" disabled="" />
 				</el-form-item>
-				
 				<el-form-item label="描述" prop="remark">
 					<el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
 				</el-form-item>
@@ -97,44 +89,42 @@
 				<el-table :data="mesFactoryModelDetailList" :row-class-name="rowMesFactoryModelDetailIndex"
 					@selection-change="handleMesFactoryModelDetailSelectionChange" ref="mesFactoryModelDetail">
 					<el-table-column type="selection" width="50" align="center" />
-					<el-table-column label="序号" align="center" prop="index" width="50" />
-				
-					<el-table-column label="设备编号" prop="equipmentId" width="150">
-						<template #default="scope">
-							<el-input v-model="scope.row.equipmentId" placeholder="请输入设备编号" />
-						</template>
-					</el-table-column>
-					
+					<el-table-column label="序号" align="center" prop="index" width="60" />
 					<el-table-column label="设备" prop="equipmentName" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.equipmentName" placeholder="请输入设备编号" />
+							<el-input v-model="scope.row.equipmentName" placeholder="" />
 						</template>
 					</el-table-column>
-					<el-table-column label="编码" prop="" width="150">
+					<el-table-column label="编码" prop="equipmentCode" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.equipmentId" placeholder="请输入设备编号" />
+							<el-input v-model="scope.row.equipmentCode" placeholder="" />
 						</template>
 					</el-table-column>
 					<el-table-column label="型号" prop="equipmentModel" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.equipmentModel" placeholder="请输入设备编号" />
+							<el-input v-model="scope.row.equipmentModel" placeholder="" />
 						</template>
 					</el-table-column>
 					<el-table-column label="生产日期" prop="productDate" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.productDate" placeholder="请输入设备编号" />
+							<el-input v-model="scope.row.productDate" placeholder="" />
 						</template>
 					</el-table-column>
-					<el-table-column label="生产批号" prop="batchNo" width="150">
+					<el-table-column label="生产批号" prop="bathNo" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.batchNo" placeholder="请输入设备编号" />
+							<el-input v-model="scope.row.bathNo" placeholder="" />
 						</template>
 					</el-table-column>
-					<el-table-column label="制造商" prop="manufacturer" width="150">
+					<el-table-column label="制造商" prop="createEr" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.manufacturer" placeholder="请输入设备编号" />
+							<el-input v-model="scope.row.createEr" placeholder="" />
 						</template>
 					</el-table-column>
+					<!-- 					<el-table-column label="设备编号" prop="equipmentId" width="150">
+						<template #default="scope">
+							<el-input v-model="scope.row.equipmentId" placeholder="请输入设备编号" />
+						</template>
+					</el-table-column> -->
 				</el-table>
 			</el-form>
 			<template #footer>
@@ -144,12 +134,15 @@
 				</div>
 			</template>
 		</el-dialog>
-		<MaterialSelect :open="materialOpen" @onCancel="materialOpen = false" @onSelected="handleMaterialSelected"></MaterialSelect>
+
+		<!-- 选择物料档案弹框 -->
+		<MaterialSelect :open="materialSelectOpen" @onSelected="handleMaterialSelected"
+			@onCancel="materialSelectOpen = false" />
 	</div>
 </template>
 
 <script setup name="FactoryModel">
-	import MaterialSelect from '@/components/Material/MaterialSelect'
+	import MaterialSelect from "@/components/Material/MaterialSelect.vue";
 	import {
 		listFactoryModel,
 		getFactoryModel,
@@ -195,8 +188,8 @@
 		rules: {
 			materialName: [{
 				required: true,
-				message: "产品名称不能为空",
-				trigger: "blur"
+				message: "产品不能为空",
+				trigger: "change"
 			}],
 			productLineName: [{
 				required: true,
@@ -238,7 +231,6 @@
 			materialName: null,
 			materialModel: null,
 			materialSpec: null,
-			materialUnit: null
 		};
 		mesFactoryModelDetailList.value = [];
 		proxy.resetForm("factoryModelRef");
@@ -359,24 +351,22 @@
 			});
 		})
 	}
-	
-	const materialOpen = ref(false)
-	
-	function openMaterialSelect(){
-		materialOpen.value = true;
+
+	const materialSelectOpen = ref(false)
+
+	function openMaterialSelect() {
+		materialSelectOpen.value = true;
 	}
-	
-	function handleMaterialSelected(rows){
-		const row = rows && rows[0];
-		// console.log(row)
+
+	function handleMaterialSelected(rows) {
+		const row = rows && rows[0]
 		form.value.materialId = row.id;
 		form.value.materialName = row.name;
 		form.value.materialModel = row.model;
 		form.value.materialSpec = row.specification;
-		materialOpen.value = false;
+		materialSelectOpen.value = false;
 	}
-	
-	
+
 
 	getList();
 </script>
