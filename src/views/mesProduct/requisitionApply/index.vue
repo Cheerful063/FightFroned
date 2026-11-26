@@ -9,9 +9,14 @@
 					placeholder="请选择领取日期">
 				</el-date-picker>
 			</el-form-item>
+			
 			<el-form-item label="申请人" prop="applyUser">
-				<el-input v-model="queryParams.applyUser" placeholder="请输入申请人" clearable @keyup.enter="handleQuery" />
+			    <el-select v-model="queryParams.applyUser" placeholder="请选择申请人" clearable filterable>
+			        <el-option v-for="u in userList" :key="u.userId" :label="u.nickName"
+			                   :value="u.userId.toString()" />
+			    </el-select>
 			</el-form-item>
+			
 			<el-form-item label="申请时间" prop="applyTime">
 				<el-date-picker clearable v-model="queryParams.applyTime" type="date" value-format="YYYY-MM-DD"
 					placeholder="请选择申请时间">
@@ -23,7 +28,10 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="审核人" prop="auditUser">
-				<el-input v-model="queryParams.auditUser" placeholder="请输入审核人" clearable @keyup.enter="handleQuery" />
+			    <el-select v-model="queryParams.auditUser" placeholder="请选择审核人" clearable filterable>
+			        <el-option v-for="u in userList" :key="u.userId" :label="u.nickName"
+			                   :value="u.userId.toString()" />
+			    </el-select>
 			</el-form-item>
 			<el-form-item label="审核时间" prop="auditTime">
 				<el-date-picker clearable v-model="queryParams.auditTime" type="date" value-format="YYYY-MM-DD"
@@ -96,9 +104,14 @@
 					<span>{{ parseTime(scope.row.auditTime, '{y}-{m}-{d}') }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="状态" align="center" prop="auditStatus">
+			<el-table-column label="审核状态" align="center" prop="auditStatus">
 				<template #default="scope">
 					<dict-tag :options="audit_status" :value="scope.row.auditStatus" />
+				</template>
+			</el-table-column>
+			<el-table-column label="状态" align="center" prop="status">
+				<template #default="scope">
+					<dict-tag :options="receive_material_status" :value="scope.row.status" />
 				</template>
 			</el-table-column>
 			<!-- <el-table-column label="状态" align="center" prop="status" /> -->
@@ -125,7 +138,7 @@
 				<el-form-item label="领料单号" prop="serialNo">
 					<el-input v-model="form.serialNo" placeholder="请输入流水号" />
 				</el-form-item>
-<!-- 				<el-form-item label="生产计划id" prop="planId">
+				<!-- 				<el-form-item label="生产计划id" prop="planId">
 					<el-input v-model="form.planId" placeholder="请输入生产计划id" />
 				</el-form-item>
 
@@ -134,7 +147,10 @@
 					<el-input v-model="form.scheduleId" placeholder="请输入计划排产id" />
 				</el-form-item> -->
 				<el-form-item label="计划排产" prop="scheduleId">
-					<el-input v-model="form.scheduleId" placeholder="请输入计划排产id" />
+					<!-- <el-input v-model="form.scheduleId" placeholder="请输入计划排产id" /> -->
+					<el-select v-model="form.scheduleId" >
+						<el-option v-for="s in scheduleList" :key="s.id" :label="s.serialNo" :value="s.id"></el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="产品" prop="productName">
 					<el-input v-model="form.productName" placeholder="请输入产品" />
@@ -152,15 +168,16 @@
 					<el-input v-model="form.requireQuantity" placeholder="请输入待产数量" />
 				</el-form-item>
 				<el-form-item label="生产日期" prop="productDate">
-					<el-input v-model="form.productDate" placeholder="请输入生产日期" />
+					<el-date-picker clearable v-model="form.productDate" type="date" value-format="YYYY-MM-DD"
+						placeholder="请选择生产日期" />
 				</el-form-item>
 				<el-form-item label="领取日期" prop="requisitionDate">
 					<el-date-picker clearable v-model="form.requisitionDate" type="date" value-format="YYYY-MM-DD"
 						placeholder="请选择领取日期">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="申请人" prop="applyUser">
-					<el-input v-model="form.applyUser" placeholder="请输入申请人" />
+				<el-form-item label="申请人" prop="applyUserName">
+					<el-input v-model="form.applyUserName" placeholder="请输入申请人" />
 				</el-form-item>
 				<el-form-item label="申请时间" prop="applyTime">
 					<el-date-picker clearable v-model="form.applyTime" type="date" value-format="YYYY-MM-DD"
@@ -173,8 +190,8 @@
 							:value="dict.value"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="审核人" prop="auditUser">
-					<el-input v-model="form.auditUser" placeholder="请输入审核人" />
+				<el-form-item label="审核人" prop="auditUserName">
+					<el-input v-model="form.auditUserName" placeholder="请输入审核人" />
 				</el-form-item>
 				<el-form-item label="审核时间" prop="auditTime">
 					<el-date-picker clearable v-model="form.auditTime" type="date" value-format="YYYY-MM-DD"
@@ -190,7 +207,7 @@
 				<el-form-item label="审核意见" prop="auditComment">
 					<el-input v-model="form.auditComment" placeholder="请输入审核意见" />
 				</el-form-item>
-<!-- 				<el-form-item label="状态" prop="status">
+				<!-- 				<el-form-item label="状态" prop="status">
 					<el-input v-model="form.status" placeholder="请输入状态" />
 				</el-form-item> -->
 				<el-form-item label="备注" prop="remark">
@@ -213,9 +230,9 @@
 					ref="mesMaterialRequisitionDetail">
 					<el-table-column type="selection" width="50" align="center" />
 					<el-table-column label="序号" align="center" prop="index" width="50" />
-					<el-table-column label="物料" prop="materialId" width="150">
+					<el-table-column label="物料" prop="materialName" width="150">
 						<template #default="scope">
-							<el-input v-model="scope.row.materialId" placeholder="请输入物料档案id" />
+							<el-input v-model="scope.row.materialName" placeholder="请输入物料档案id" />
 						</template>
 					</el-table-column>
 					<el-table-column label="型号" prop="materialModel" width="120" />
@@ -240,8 +257,11 @@
 			</el-form>
 			<template #footer>
 				<div class="dialog-footer">
-					<el-button type="primary" @click="submitForm(0)">保 存</el-button>
-					<el-button type="success" @click="submitForm(1)">提 交</el-button>
+					<el-button v-if="form.id == null" type="primary" @click="submitForm(1)">提 交</el-button>
+					<template v-else>
+						<el-button type="primary" @click="submitForm(0)">保 存</el-button>
+						<el-button type="success" @click="submitForm(1)">提 交</el-button>
+					</template>
 					<el-button @click="cancel">取 消</el-button>
 				</div>
 			</template>
@@ -250,6 +270,7 @@
 </template>
 
 <script setup name="RequisitionApply">
+	import { listUser } from "@/api/system/user"
 	import {
 		listRequisitionApply,
 		getRequisitionApply,
@@ -257,6 +278,7 @@
 		addRequisitionApply,
 		updateRequisitionApply
 	} from "@/api/mesProduct/requisitionApply";
+	import { listProductSchedule } from "@/api/mesPlan/productSchedule";
 	const {
 		proxy
 	} = getCurrentInstance();
@@ -289,6 +311,10 @@
 	const {
 		audit_status
 	} = proxy.useDict('audit_status')
+
+	const {
+		receive_material_status
+	} = proxy.useDict('receive_material_status')
 
 
 
@@ -497,5 +523,22 @@
 		checkedMesMaterialRequisitionDetail.value = selection.map(item => item.index)
 	}
 
+	// 计划排产
+	const scheduleList = ref([]);
+	function getScheduleList(){
+		listProductSchedule({pageNum:1,pageSize:999}).then(res => {
+			scheduleList.value = res.rows;
+		})
+	}
+	
+	const userList = ref([])
+	function getUserList(){
+		listUser({pageNum:1,pageSize:999}).then(res => {
+			userList.value = res.rows;
+		})
+	}
+	
+	getUserList();
+	getScheduleList();
 	getList();
 </script>

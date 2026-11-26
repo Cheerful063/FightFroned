@@ -25,10 +25,10 @@
 						:value="dict.value" />
 				</el-select>
 			</el-form-item>
-			<el-form-item label="检验人" prop="checkUser">
-				<el-input v-model="queryParams.checkUser" placeholder="请输入检验人" clearable @keyup.enter="handleQuery" />
+			<el-form-item label="检验人" prop="checkUserName">
+				<el-input v-model="queryParams.checkUserName" placeholder="请输入检验人" clearable @keyup.enter="handleQuery" />
 			</el-form-item>
-			<el-form-item label="检验时间" style="width: 308px">
+			<el-form-item label="检验时间" style="width: 308px;font-weight: bold;">
 				<el-date-picker v-model="daterangeCheckDate" value-format="YYYY-MM-DD" type="daterange"
 					range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
 			</el-form-item>
@@ -71,7 +71,7 @@
 			<el-table-column label="物料名称" align="center" prop="materialName" />
 			<el-table-column label="规格" align="center" prop="materialSpec" />
 			<el-table-column label="型号" align="center" prop="materialModel" />
-			<el-table-column label="单位" align="center" prop="materialModel" />
+			<el-table-column label="单位" align="center" prop="materialUnit" />
 			<el-table-column label="检验项" align="center" prop="checkItemName" />
 			<el-table-column label="生产数量" align="center" prop="productQuantity" />
 			<el-table-column label="采样数量" align="center" prop="checkQuantity" />
@@ -150,8 +150,8 @@
 				<el-form-item label="备注" prop="remark">
 					<el-input v-model="form.remark" placeholder="请输入备注" />
 				</el-form-item>
-				<el-form-item label="检验人" prop="checkUserName">
-					<el-input v-model="form.checkUserName" placeholder="请输入检验人" />
+				<el-form-item label="检验人" prop="checkUser">
+					<el-input v-model="form.checkUser" placeholder="请输入检验人" />
 				</el-form-item>
 				<el-form-item label="检验时间" prop="checkDate">
 					<el-date-picker clearable v-model="form.checkDate" type="date" value-format="YYYY-MM-DD"
@@ -179,6 +179,7 @@
 </template>
 
 <script setup name="ProcessCheck">
+	import { listUser } from "@/api/system/user"
 	import StandardSelect from '@/components/MesCheck/StandardSelect'
 	import ProductJobSelect from '@/components/product/ProductJobSelect'
 	import {
@@ -256,7 +257,8 @@
 			minValue: null,
 			checkResult: null,
 			checkUser: null,
-			checkDate: null
+			checkDate: null,
+			checkUserName: null
 		},
 		rules: {
 			jobName: [{
@@ -298,30 +300,33 @@
 		form,
 		rules
 	} = toRefs(data);
-
+	
+	
+	const userList = ref([])
+	listUser({pageNum:1,pageSize:999}).then(res => {
+		userList.value = res.rows || [];
+		getList();
+	})
 	/** 查询生产采样单列表 */
 	function getList() {
-		loading.value = true;
 		queryParams.value.params = {};
-		if (null != daterangeCheckDate && '' != daterangeCheckDate) {
-			queryParams.value.params["beginCheckDate"] = daterangeCheckDate.value[0];
-			queryParams.value.params["endCheckDate"] = daterangeCheckDate.value[1];
+		if(daterangeCheckDate.value && daterangeCheckDate.value.length === 2){
+			queryParams.value.params['beginCheckDate'] = daterangeCheckDate.value[0] + " 00:00:00";
+			queryParams.value.params['endCheckDate'] = daterangeCheckDate.value[1] + " 23:59:59";
 		}
-		listProcessCheck(queryParams.value).then(response => {
-			processCheckList.value = response.rows;
-			total.value = response.total;
+		const kw = queryParams.value.checkUserName;
+		if(kw){
+			const hit = userList.value.find(u => u.userName && u.userName.includes(kw));
+			queryParams.value.checkUser = hit ? String(hit.userId) : "-1"
+		}else{
+			queryParams.value.checkUser = null;
+		}
+		listProcessCheck(queryParams.value).then(res => {
+			processCheckList.value = res.rows;
+			total.value = res.total;
 			loading.value = false;
 		});
 	}
-	// const allRows = ref([])
-	// function getList(){
-	// 	loading.value = true;
-	// 	listProcessCheck({pageNum:1,pageSize:999}).then(res => {
-	// 		allRows.value = res.rows
-	// 		loading.value = false;
-	// 	})
-	// }
-
 	// 取消按钮
 	function cancel() {
 		open.value = false;
@@ -449,6 +454,13 @@
 		form.value.materialName = row.productName;
 		form.value.productQuantity = row.productQuantity;
 		
+		form.value.productJobId = row.id;
+		form.value.productPlanId = row.planId;
+		form.value.productScheduleId = row.scheduleId;
+		form.value.productLineId = row.lineId;
+		form.value.materialId = row.materialId;
+		productJobSelectOpen.value = false;
+		
 		productJobSelectOpen.value = false;
 	}
 	
@@ -475,7 +487,8 @@
 	
 	
 	
+
 	
 	
-	getList();
+	// getList();
 </script>

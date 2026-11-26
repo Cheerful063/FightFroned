@@ -173,6 +173,7 @@
     </el-dialog>
   </div>
 </template>
+
 <script>
 import { listProjectInfo, getProjectInfo, delProjectInfo, addProjectInfo, updateProjectInfo, exportProjectInfo } from "@/api/baseInfo/projectInfo";
 import ImageUpload from '@/components/ImageUpload';

@@ -158,7 +158,7 @@
 
 
 
-	const pickTarget = ref(null); // 'product' 或 明细行对象
+	const pickTarget = ref(null);                               // 'product' 或 明细行对象
 
 	const materialSelectOpen = ref(false);
 	const material = ref(null);
@@ -353,6 +353,7 @@
 	}
 
 	function handleMaterialSelected(list) {
+		console.log(list);
 		if (list && list.length > 0) {
 			const m = list[0];
 			// 填上半部分

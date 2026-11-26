@@ -62,17 +62,17 @@
 					<el-input v-model="form.productLineName" placeholder="请输入生产线名称" />
 				</el-form-item>
 				<el-form-item label="产品" prop="materialName">
-					<el-input v-model="form.materialName" placeholder="" readonly="">
+					<el-input v-model="form.materialName" placeholder="" readonly>
 						<template #append>
 							<el-button @click="openMaterialSelect">选择</el-button>
 						</template>
 					</el-input>
 				</el-form-item>
 				<el-form-item label="产品型号" prop="materialModel">
-					<el-input v-model="form.materialModel" placeholder="" disabled="" />
+					<el-input v-model="form.materialModel" placeholder="" disabled />
 				</el-form-item>
 				<el-form-item label="产品规格" prop="materialSpec">
-					<el-input v-model="form.materialSpec" placeholder="" disabled="" />
+					<el-input v-model="form.materialSpec" placeholder="" disabled />
 				</el-form-item>
 				<el-form-item label="描述" prop="remark">
 					<el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
